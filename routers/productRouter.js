@@ -15,13 +15,9 @@ productRouter.get(
     const nombre = req.query.nombre || '';
     const category = req.query.category || '';
     const order = req.query.order || '';
-    const min =
-      req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
-    const max =
-      req.query.max && Number(req.query.max) !== 0 ? Number(req.query.max) : 0;
-    const nameFilter = nombre
-      ? { nombre: { $regex: nombre, $options: 'i' } }
-      : {};
+    const min = req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
+    const max = req.query.max && Number(req.query.max) !== 0 ? Number(req.query.max) : 0;
+    const nameFilter = nombre ? { nombre: { $regex: nombre, $options: 'i' } } : {};
     const categoryFilter = category ? { category } : {};
     const priceFilter = min && max ? { price: { $gte: min, $lte: max } } : {};
     const count = await Producto.countDocuments({
@@ -75,35 +71,26 @@ productRouter.post(
   isAuth,
   isSellerOrAdmin,
   expressAsyncHandler(async (req, res) => {
+    console.log('creacion llamada');
     const product = new Producto({
-      name: 'ID-' + Date.now(),
-      seller: req.user._id,
-      image: '/images/nuevo.jpg',
+      nombre: 'ID-' + Date.now(),
+      imagen: '/images/nuevo.jpg',
       cloudImage: ' ',
-      price: 0,
-      category: 'N/A',
-      brand: 'N/A',
-      countInStock: 0,
-      sizesInStock: [],
-      rating: 0,
-      numReviews: 0,
-      description: 'sample description',
-      sku: 'N/A',
-      lote: 'N/A',
+      marca: 'N/A',
       modelo: 'N/A',
-      subcategory: 'N/A',
+      categoria: 'N/A',
+      descripcion: 'Producto Nuevo por Agregar Descripcion',
       costo: 0,
+      precio: 0,
       preciomayor: 0,
       preciodescuento: 0,
       precioespecial: 0,
       preciodocena: 0,
-      genero: 'N/A',
-      tipo: 'N/A',
-      importado: 'SI',
       proveedor: '60f6db4f143c7d2bf856444a',
-      pais: 'N/A',
-      tags: 'N/A',
+      tags: [],
+      inventario: 0,
     });
+    console.log('producto en creacion yo');
     const createdProduct = await product.save();
     res.send({ message: 'Product Created', product: createdProduct });
   })

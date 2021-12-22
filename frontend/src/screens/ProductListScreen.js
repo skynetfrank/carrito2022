@@ -1,17 +1,12 @@
+import { faPencilAlt, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import {
-  createProduct,
-  deleteProduct,
-  listProducts,
-} from '../actions/productActions';
+import { createProduct, deleteProduct, listProducts } from '../actions/productActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import {
-  PRODUCT_CREATE_RESET,
-  PRODUCT_DELETE_RESET,
-} from '../constants/productConstants';
+import { PRODUCT_CREATE_RESET, PRODUCT_DELETE_RESET } from '../constants/productConstants';
 
 export default function ProductListScreen(props) {
   const { pageNumber = 1 } = useParams();
@@ -21,19 +16,10 @@ export default function ProductListScreen(props) {
   const { loading, error, products, page, pages } = productList;
 
   const productCreate = useSelector(state => state.productCreate);
-  const {
-    loading: loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    product: createdProduct,
-  } = productCreate;
+  const { loading: loadingCreate, error: errorCreate, success: successCreate, product: createdProduct } = productCreate;
 
   const productDelete = useSelector(state => state.productDelete);
-  const {
-    loading: loadingDelete,
-    error: errorDelete,
-    success: successDelete,
-  } = productDelete;
+  const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete;
   const userSignin = useSelector(state => state.userSignin);
   const { userInfo } = userSignin;
   const dispatch = useDispatch();
@@ -45,19 +31,8 @@ export default function ProductListScreen(props) {
     if (successDelete) {
       dispatch({ type: PRODUCT_DELETE_RESET });
     }
-    dispatch(
-      listProducts({ seller: sellerMode ? userInfo._id : '', pageNumber })
-    );
-  }, [
-    createdProduct,
-    dispatch,
-    props.history,
-    sellerMode,
-    successCreate,
-    successDelete,
-    userInfo._id,
-    pageNumber,
-  ]);
+    dispatch(listProducts({ seller: sellerMode ? userInfo._id : '', pageNumber }));
+  }, [createdProduct, dispatch, props.history, sellerMode, successCreate, successDelete, userInfo._id, pageNumber]);
 
   const deleteHandler = product => {
     if (window.confirm('Are you sure to delete?')) {
@@ -89,10 +64,7 @@ export default function ProductListScreen(props) {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <React.Fragment key={99}>
-          <table
-            className="table table-container__table table-container__table--break-sm"
-            id="product-list-table"
-          >
+          <table className="table table-container__table table-container__table--break-sm" id="product-list-table">
             <thead>
               <tr>
                 <th>ID-Producto</th>
@@ -108,9 +80,7 @@ export default function ProductListScreen(props) {
             <tbody>
               {products.map(product => (
                 <tr key={product._id}>
-                  <td data-heading="ID-PRODUCTO">
-                    {product._id.substr(1, 10)}
-                  </td>
+                  <td data-heading="ID-PRODUCTO">{product._id.substr(1, 10)}</td>
                   <td data-heading="Nombre Producto">{product.nombre}</td>
                   <td data-heading="Descripcion">{product.descripcion}</td>
                   <td data-heading="Precion US$">{product.precio}</td>
@@ -118,28 +88,18 @@ export default function ProductListScreen(props) {
                   <td data-heading="Marca">{product.marca}</td>
                   <td data-heading="Stock">{product.inventario}</td>
                   <td data-heading="Acciones">
-                    <button
-                      type="button"
-                      className="small btn-circle"
-                      onClick={() => verHandler(product)}
-                    >
-                      <i className="fas fa-search"></i>
+                    <button type="button" className="small btn-circle">
+                      <FontAwesomeIcon icon={faSearch} onClick={() => verHandler(product)} />
                     </button>
                     <button
                       type="button"
                       className="small btn-circle"
-                      onClick={() =>
-                        props.history.push(`/product/${product._id}/edit`)
-                      }
+                      onClick={() => props.history.push(`/product/${product._id}/edit`)}
                     >
-                      <i className="fas fa-pencil-alt"></i>
+                      <FontAwesomeIcon icon={faPencilAlt} />
                     </button>
-                    <button
-                      type="button"
-                      className="small btn-circle"
-                      onClick={() => deleteHandler(product)}
-                    >
-                      <i className="fas fa-trash"></i>
+                    <button type="button" className="small btn-circle" onClick={() => deleteHandler(product)}>
+                      <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </td>
                 </tr>
@@ -148,11 +108,7 @@ export default function ProductListScreen(props) {
           </table>
           <div className="row center pagination">
             {[...Array(pages).keys()].map(x => (
-              <Link
-                className={x + 1 === page ? 'active' : ''}
-                key={x + 1}
-                to={`/productlist/pageNumber/${x + 1}`}
-              >
+              <Link className={x + 1 === page ? 'active' : ''} key={x + 1} to={`/productlist/pageNumber/${x + 1}`}>
                 {x + 1}
               </Link>
             ))}

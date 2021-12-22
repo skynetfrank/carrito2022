@@ -414,8 +414,7 @@ i {
   padding: 5px;
   color: #0f3959;
   font-size: 20px;
- }
-
+}
 
 .fa-search:hover {
   color: rgb(173, 85, 22);
@@ -525,11 +524,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.div-dashboard {
-  background: url('./dashboard-bg.jpg') no-repeat top center;
-  background-size: cover;
 }
 
 /* Dropdown */
@@ -1193,5 +1187,4 @@ i {
   #efectivo-cash {
     width: 200px;
   }
-  
 }

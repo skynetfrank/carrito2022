@@ -24,15 +24,7 @@ import {
 } from '../constants/productConstants';
 
 export const listProducts =
-  ({
-    pageNumber = '',
-    seller = '',
-    nombre = '',
-    category = '',
-    order = '',
-    min = 0,
-    max = 0,
-  }) =>
+  ({ pageNumber = '', seller = '', nombre = '', category = '', order = '', min = 0, max = 0 }) =>
   async dispatch => {
     dispatch({
       type: PRODUCT_LIST_REQUEST,
@@ -67,20 +59,19 @@ export const detailsProduct = productId => async dispatch => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message,
     });
   }
 };
 
 export const createProduct = () => async (dispatch, getState) => {
+  console.log('data producto action crear:');
   dispatch({ type: PRODUCT_CREATE_REQUEST });
   const {
     userSignin: { userInfo },
   } = getState();
   try {
+    console.log('inicio del try');
     const { data } = await Axios.post(
       '/api/products',
       {},
@@ -88,15 +79,13 @@ export const createProduct = () => async (dispatch, getState) => {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       }
     );
+    console.log('data producto creado:', data);
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
       payload: data.product,
     });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
+    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
     dispatch({ type: PRODUCT_CREATE_FAIL, payload: message });
   }
 };
@@ -112,10 +101,7 @@ export const updateProduct = product => async (dispatch, getState) => {
     });
     dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
+    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
     dispatch({ type: PRODUCT_UPDATE_FAIL, error: message });
   }
 };
@@ -132,37 +118,26 @@ export const deleteProduct = productId => async (dispatch, getState) => {
     console.log('Producto eliminado:', data);
     dispatch({ type: PRODUCT_DELETE_SUCCESS });
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
+    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
     dispatch({ type: PRODUCT_DELETE_FAIL, payload: message });
   }
 };
 
-export const createReview =
-  (productId, review) => async (dispatch, getState) => {
-    dispatch({ type: PRODUCT_REVIEW_CREATE_REQUEST });
-    const {
-      userSignin: { userInfo },
-    } = getState();
-    try {
-      const { data } = await Axios.post(
-        `/api/products/${productId}/reviews`,
-        review,
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({
-        type: PRODUCT_REVIEW_CREATE_SUCCESS,
-        payload: data.review,
-      });
-    } catch (error) {
-      const message =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      dispatch({ type: PRODUCT_REVIEW_CREATE_FAIL, payload: message });
-    }
-  };
+export const createReview = (productId, review) => async (dispatch, getState) => {
+  dispatch({ type: PRODUCT_REVIEW_CREATE_REQUEST });
+  const {
+    userSignin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await Axios.post(`/api/products/${productId}/reviews`, review, {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    dispatch({
+      type: PRODUCT_REVIEW_CREATE_SUCCESS,
+      payload: data.review,
+    });
+  } catch (error) {
+    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+    dispatch({ type: PRODUCT_REVIEW_CREATE_FAIL, payload: message });
+  }
+};
