@@ -42,5 +42,5 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
-  console.log(`servidor ok escuchando en http://localhost:${port}`);
+  console.log(`servidor ok escuchando en http://localhost:${port}`,process.env.MONGODB_URI);
 });
